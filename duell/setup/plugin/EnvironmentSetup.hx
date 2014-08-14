@@ -7,6 +7,8 @@ import duell.helpers.ProcessHelper;
 
 class EnvironmentSetup
 {
+    private static var appleXcodeURL = "http://developer.apple.com/xcode/";
+
     public function new()
     {
 

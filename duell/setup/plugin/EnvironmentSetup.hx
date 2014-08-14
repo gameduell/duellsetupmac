@@ -9,6 +9,6 @@ class EnvironmentSetup
 
     public function setup(args : Array<String>)
     {
-        trace("EXTERNAL YEAHA On plugin");
+        trace("EXTERNAL YEAHA SMALL CHANGE");
     }
 }

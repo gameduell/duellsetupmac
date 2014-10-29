@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<plugin>
+	<documentation>
+    Use this plugin to setup the mac platform. It checks for the xcode installation and command line tools.
+	</documentation>
+	<configuration>
+	</configuration>
+</plugin>
+
+

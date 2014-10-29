@@ -14,7 +14,7 @@ class EnvironmentSetup
 
     }
 
-    public function setup(args : Array<String>) : String
+    public function setup() : String
     {
         try
         {

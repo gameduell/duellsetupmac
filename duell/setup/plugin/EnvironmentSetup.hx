@@ -3,7 +3,10 @@ package duell.setup.plugin;
 import duell.helpers.PlatformHelper;
 import duell.helpers.AskHelper;
 import duell.helpers.LogHelper;
-import duell.helpers.ProcessHelper;
+import duell.helpers.CommandHelper;
+
+
+import duell.objects.DuellProcess;
 
 class EnvironmentSetup
 {
@@ -52,9 +55,10 @@ class EnvironmentSetup
     {
         LogHelper.println("Checking xcode installation...");
 
-        var output : String = ProcessHelper.runProcess("", "xcode-select", ["-v"], true, true, true, false);
+        var proc = new DuellProcess("", "xcode-select", ["-v"], {block:true, systemCommand:true, errorMessage: "checking for the xcode installation"});
+        var output = proc.getCompleteStdout().toString(); 
 
-        if(output.indexOf("xcode-select version") == -1)
+        if(proc.exitCode() != 0 || output.indexOf("xcode-select version") == -1)
         {
             LogHelper.println("It seems xcode is not installed.");
             LogHelper.println("You must purchase Xcode from the Mac App Store or download using a paid");
@@ -64,7 +68,7 @@ class EnvironmentSetup
 
             if(answer)
             {
-                ProcessHelper.openURL(appleXcodeURL);
+                CommandHelper.openURL(appleXcodeURL);
             }
 
             LogHelper.println("Rerun the script with xcode installed.");
@@ -82,15 +86,16 @@ class EnvironmentSetup
     {
         LogHelper.println("Checking xcode command line tools installation...");
 
-        var output : String = ProcessHelper.runProcess("", "pkgutil", ["--pkg-info=com.apple.pkg.CLTools_Executables"], true, true, true, false);
+        var proc = new DuellProcess("", "pkgutil", ["--pkg-info=com.apple.pkg.CLTools_Executables"], {block:true, systemCommand:true});
+        var output = proc.getCompleteStdout().toString(); 
 
-        if(output == null || output.indexOf("package-id:") == -1)
+        if(proc.exitCode() != 0 || output == null || output.indexOf("package-id:") == -1)
         {
             LogHelper.println("It seems the xcode command line tools are not installed.");
 
             var answer = AskHelper.askYesOrNo("Do you want to install them?");
 
-            var output : String = ProcessHelper.runProcess("", "xcode-select", ["--install"], true, true, true, false);
+            CommandHelper.runCommand("", "xcode-select", ["--install"], {systemCommand:true, errorMessage: "trying to install the command line tools"});
 
             LogHelper.println("Rerun the script with the command line tools installed.");
         }

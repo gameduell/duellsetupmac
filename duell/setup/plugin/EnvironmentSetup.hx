@@ -45,34 +45,27 @@ class EnvironmentSetup
 
     public function setup() : String
     {
-        try
+        if(PlatformHelper.hostPlatform != Platform.MAC)
         {
-            if(PlatformHelper.hostPlatform != Platform.MAC)
-            {
-                LogHelper.error("Wrong platform!");
-            }
-
-            LogHelper.info("");
-            LogHelper.info("\x1b[2m------");
-            LogHelper.info("Mac Setup");
-            LogHelper.info("------\x1b[0m");
-            LogHelper.info("");
-
-            downloadXCode();
-
-            LogHelper.println("");
-
-            downloadCommandLineTools();
-
-            LogHelper.info("");
-            LogHelper.info("\x1b[2m------");
-            LogHelper.info("end");
-            LogHelper.info("------\x1b[0m");
-
-        } catch(error : Dynamic)
-        {
-            LogHelper.error("An error occurred, do you need admin permissions to run the script? Check if you have permissions to write on the paths you specify. Error:" + error);
+            throw "Wrong platform!";
         }
+
+        LogHelper.info("");
+        LogHelper.info("\x1b[2m------");
+        LogHelper.info("Mac Setup");
+        LogHelper.info("------\x1b[0m");
+        LogHelper.info("");
+
+        downloadXCode();
+
+        LogHelper.println("");
+
+        downloadCommandLineTools();
+
+        LogHelper.info("");
+        LogHelper.info("\x1b[2m------");
+        LogHelper.info("end");
+        LogHelper.info("------\x1b[0m");
 
         return "success";
     }
@@ -82,7 +75,7 @@ class EnvironmentSetup
         LogHelper.println("Checking xcode installation...");
 
         var proc = new DuellProcess("", "xcode-select", ["-v"], {block:true, systemCommand:true, errorMessage: "checking for the xcode installation"});
-        var output = proc.getCompleteStdout().toString(); 
+        var output = proc.getCompleteStdout().toString();
 
         if(proc.exitCode() != 0 || output.indexOf("xcode-select version") == -1)
         {
@@ -113,7 +106,7 @@ class EnvironmentSetup
         LogHelper.println("Checking xcode command line tools installation...");
 
         var proc = new DuellProcess("", "pkgutil", ["--pkg-info=com.apple.pkg.CLTools_Executables"], {block:true, systemCommand:true});
-        var output = proc.getCompleteStdout().toString(); 
+        var output = proc.getCompleteStdout().toString();
 
         if(proc.exitCode() != 0 || output == null || output.indexOf("package-id:") == -1)
         {
